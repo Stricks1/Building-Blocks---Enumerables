@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ModuleLength
 module Enumerable
   def my_each
     return to_enum unless block_given?
@@ -110,7 +111,21 @@ module Enumerable
   end
 
   # rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+
+  def my_map
+    return to_enum unless block_given?
+
+    map_array = []
+    i = 0
+    while i < size
+      map_array << (yield self[i])
+      i += 1
+    end
+    map_array
+  end
 end
+
+# rubocop:enable Metrics/ModuleLength
 
 # array = %w[4 3 78 2 0 2]
 
@@ -142,6 +157,10 @@ end
 
 # ary = [1, 2, 4, 2]
 
-# p ary.count
-# p ary.count(2)
-# p ary.count{ |x| x%2==0 }
+# p ary.my_count
+# p ary.my_count(2)
+# p ary.my_count{ |x| x%2==1 }
+
+# ary = [1, 2, 3, 4]
+
+# ary.map { |i| i*i }
