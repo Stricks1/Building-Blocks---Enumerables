@@ -70,6 +70,24 @@ module Enumerable
     false
   end
 
+  def my_none?
+    i = 0
+    unless block_given?
+      while i < size
+        return false if self[i] != false && !self[i].nil?
+
+        i += 1
+      end
+      return true
+    end
+    while i < size
+      return false if yield self[i]
+
+      i += 1
+    end
+    true
+  end
+
   # rubocop:enable Metrics/CyclomaticComplexity
 end
 
@@ -86,14 +104,17 @@ end
 # puts "select method my : #{a.my_select { |v| v =~ /[aeiou]/ }}\n\n" #=> ["a", "e"]
 
 # c = [18, 22, 3, 3, 53, 6]
-# # puts "select method : #{c.select(&:even?)}\n\n"
-# # puts "select method my : #{c.my_select(&:even?)}\n\n"
+# puts "select method : #{c.select(&:even?)}\n\n"
+# puts "select method my : #{c.my_select(&:even?)}\n\n"
 
 # puts "all? method : #{c.all? { |x| x > 3 }}\n\n"
 # puts "all method my : #{c.my_all? { |x| x > 3 }}\n\n"
 
-# # puts "select method : #{c.select(&:even?)}\n\n"
-# # puts "select method my : #{c.my_select(&:even?)}\n\n"
+# puts "select method : #{c.select(&:even?)}\n\n"
+# puts "select method my : #{c.my_select(&:even?)}\n\n"
 
 # puts "any? method : #{c.any? { |x| x < 50 }}\n\n"
 # puts "any method my : #{c.my_any? { |x| x < 50 }}\n\n"
+
+# puts "none? method : #{c.none?{ |x| x > 52 }}\n\n"
+# puts "none method my : #{c.my_none?{ |x| x > 52 }}\n\n"
