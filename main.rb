@@ -33,29 +33,50 @@ module Enumerable
     new_array
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+
   def my_all?
     i = 0
+    some_null = false
     unless block_given?
-      someNull = false
       while i < size
-        someNull = true if self[i] == false || self[i] == nil
+        some_null = true if self[i] == false || self[i].nil?
         i += 1
       end
-      return !someNull
+      return !some_null
     end
-    someNull = false
     while i < size
-      someNull = true unless yield self[i]
+      some_null = true unless yield self[i]
       i += 1
     end
-    return !someNull
+    !some_null
   end
+
+  def my_any?
+    i = 0
+    unless block_given?
+      while i < size
+        return true if self[i] != false && !self[i].nil?
+
+        i += 1
+      end
+      return false
+    end
+    while i < size
+      return true if yield self[i]
+
+      i += 1
+    end
+    false
+  end
+
+  # rubocop:enable Metrics/CyclomaticComplexity
 end
 
 # array = %w[4 3 78 2 0 2]
 
 # p(array.each { |x| p "Element #{x}" })
-#p(array.my_each { |x| p "Element #{x}" })
+# p(array.my_each { |x| p "Element #{x}" })
 
 # p(array.each_with_index { |x, y| p "We have #{x} with index #{y}" })
 # p(array.my_each_with_index { |x, y| p "We have #{x} with index #{y}" })
@@ -64,9 +85,15 @@ end
 # puts "select method : #{a.select { |v| v =~ /[aeiou]/ }}\n\n" #=> ["a", "e"]
 # puts "select method my : #{a.my_select { |v| v =~ /[aeiou]/ }}\n\n" #=> ["a", "e"]
 
-c = [18, 22, 3, 3, 53, 6]
-# puts "select method : #{c.select(&:even?)}\n\n"
-# puts "select method my : #{c.my_select(&:even?)}\n\n"
+# c = [18, 22, 3, 3, 53, 6]
+# # puts "select method : #{c.select(&:even?)}\n\n"
+# # puts "select method my : #{c.my_select(&:even?)}\n\n"
 
-puts "all? method : #{c.all? { |x| x > 3 }}\n\n"
-puts "all method my : #{c.my_all? { |x| x > 3 }}\n\n"
+# puts "all? method : #{c.all? { |x| x > 3 }}\n\n"
+# puts "all method my : #{c.my_all? { |x| x > 3 }}\n\n"
+
+# # puts "select method : #{c.select(&:even?)}\n\n"
+# # puts "select method my : #{c.my_select(&:even?)}\n\n"
+
+# puts "any? method : #{c.any? { |x| x < 50 }}\n\n"
+# puts "any method my : #{c.my_any? { |x| x < 50 }}\n\n"
