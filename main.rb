@@ -88,7 +88,28 @@ module Enumerable
     true
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+
+  def my_count(*args)
+    return size if args.size.zero? && !block_given?
+
+    i = 0
+    cont = 0
+    unless block_given?
+      while i < size
+        cont += 1 if self[i] == args[0]
+        i += 1
+      end
+      return cont
+    end
+    while i < size
+      cont += 1 if yield self[i]
+      i += 1
+    end
+    cont
+  end
+
+  # rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
 end
 
 # array = %w[4 3 78 2 0 2]
@@ -118,3 +139,9 @@ end
 
 # puts "none? method : #{c.none?{ |x| x > 52 }}\n\n"
 # puts "none method my : #{c.my_none?{ |x| x > 52 }}\n\n"
+
+# ary = [1, 2, 4, 2]
+
+# p ary.count
+# p ary.count(2)
+# p ary.count{ |x| x%2==0 }
