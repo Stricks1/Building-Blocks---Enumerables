@@ -130,11 +130,11 @@ module Enumerable
     map_array
   end
 
-  # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+  # rubocop:disable Style/StringLiterals,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
 
   def my_inject(*args)
     ver_arr = is_a?(Range) ? to_a : self
-    return "no block given" if args.empty? && !block_given?
+    return "no block or args given" if args.empty? && !block_given?
 
     return args.last.to_s + " is not a symbol" if args.last.class != Symbol && !block_given?
 
@@ -160,9 +160,13 @@ module Enumerable
   end
 end
 
-# rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity,Metrics/ModuleLength
+def multiply_els(arr)
+  arr.my_inject(:*)
+end
 
-# array = %w[4 3 78 2 0 2]
+# rubocop:enable Style/StringLiterals,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity,Metrics/ModuleLength
+
+# p multiply_els([2, 4, 5])
 
 # p(array.each { |x| p "Element #{x}" })
 # p(array.my_each { |x| p "Element #{x}" })
