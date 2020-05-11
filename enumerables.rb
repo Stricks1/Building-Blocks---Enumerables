@@ -129,9 +129,38 @@ module Enumerable
     end
     map_array
   end
+
+  # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+
+  def my_inject(*args)
+    ver_arr = is_a?(Range) ? to_a : self
+    return "no block given" if args.empty? && !block_given?
+
+    return args.last.to_s + " is not a symbol" if args.last.class != Symbol && !block_given?
+
+    if args.first.class != Symbol && args.first.class != NilClass
+      sum = args.first
+      i = 0
+    else
+      sum = ver_arr[0]
+      i = 1
+    end
+
+    if !block_given?
+      while i < size
+        sum = sum.send(args.last.to_s, ver_arr[i])
+        i += 1
+      end
+    else
+      ver_arr.shift if args.first.class == NilClass
+      ver_arr.my_each { |x| sum = yield sum, x }
+    end
+
+    sum
+  end
 end
 
-# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity,Metrics/ModuleLength
 
 # array = %w[4 3 78 2 0 2]
 
