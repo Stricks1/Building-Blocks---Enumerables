@@ -37,60 +37,117 @@ module Enumerable
     new_array
   end
 
-  # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity,Metrics/MethodLength
 
-  def my_all?
+  def my_all?(*args)
     ver_arr = is_a?(Range) ? to_a : self
     i = 0
     some_null = false
-    unless block_given?
+    if block_given?
       while i < size
-        some_null = true if ver_arr[i] == false || ver_arr[i].nil?
+        some_null = true unless yield ver_arr[i]
         i += 1
       end
       return !some_null
     end
-    while i < size
-      some_null = true unless yield ver_arr[i]
-      i += 1
+    if args.empty?
+      while i < size
+        some_null = true if ver_arr[i] == false || ver_arr[i].nil?
+        i += 1
+      end
+    elsif args.first.class == Class
+      while i < size
+        some_null = true unless ver_arr[i].is_a?(args.first)
+        i += 1
+      end
+    elsif args.first.is_a?(Regexp)
+      while i < size
+        some_null = true unless args.first.match(ver_arr[i])
+        i += 1
+      end
+    else
+      while i < size
+        some_null = true unless args.first == ver_arr[i]
+        i += 1
+      end
     end
     !some_null
   end
 
-  def my_any?
+  def my_any?(*args)
     ver_arr = is_a?(Range) ? to_a : self
     i = 0
-    unless block_given?
+    if block_given?
       while i < size
-        return true if ver_arr[i] != false && !ver_arr[i].nil?
+        return true if yield ver_arr[i]
 
         i += 1
       end
       return false
     end
-    while i < size
-      return true if yield ver_arr[i]
+    if args.empty?
+      while i < size
+        return true if ver_arr[i] != false && !ver_arr[i].nil?
 
-      i += 1
+        i += 1
+      end
+    elsif args.first.class == Class
+      while i < size
+        return true if ver_arr[i].is_a?(args.first)
+
+        i += 1
+      end
+    elsif args.first.is_a?(Regexp)
+      while i < size
+        return true if args.first.match(ver_arr[i])
+
+        i += 1
+      end
+    else
+      while i < size
+        return true if args.first == ver_arr[i]
+
+        i += 1
+      end
     end
     false
   end
 
-  def my_none?
+  def my_none?(*args)
     ver_arr = is_a?(Range) ? to_a : self
     i = 0
-    unless block_given?
+    if block_given?
       while i < size
-        return false if ver_arr[i] != false && !ver_arr[i].nil?
+        return false if yield ver_arr[i]
 
         i += 1
       end
       return true
     end
-    while i < size
-      return false if yield ver_arr[i]
+    if args.empty?
+      while i < size
+        return false if ver_arr[i] != false && !ver_arr[i].nil?
 
-      i += 1
+        i += 1
+      end
+    elsif args.first.class == Class
+      while i < size
+        return false if ver_arr[i].is_a?(args.first)
+
+        i += 1
+      end
+    elsif args.first.is_a?(Regexp)
+      while i < size
+        return false if args.first.match(ver_arr[i])
+
+        i += 1
+      end
+    else
+      while i < size
+        return false if args.first == ver_arr[i]
+
+        i += 1
+      end
     end
     true
   end
@@ -115,7 +172,7 @@ module Enumerable
     cont
   end
 
-  # rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity,Metrics/MethodLength
 
   def my_map(proc_my = nil)
     ver_arr = is_a?(Range) ? to_a : self
