@@ -4,7 +4,7 @@ describe Enumerable do
   let(:test_array1) { [11, 2, 3, 56] }
   let(:test_array2) { %w[a b c d] }
   let(:a) { %w[a b c d e f] }
-  let(:c) { [18, 22, 3, 3, 53, 6]}
+  let(:c) { [18, 22, 3, 3, 53, 6] }
   let(:true_array) { [1, true, "hi", []] }
   let(:false_array) { [nil, false, nil, false] }
   let(:words) { %w[dog door rod blade] }
@@ -14,6 +14,9 @@ describe Enumerable do
      6, 7, 2, 5, 8, 2, 0, 7, 3, 2, 3, 6, 1, 2, 8, 3, 7, 0, 5, 0, 0, 2, 6, 1, 5, 2]
   }
   let(:my_each_output) { "" }
+  let(:ary) { [1, 2, 4, 2] }
+  let(:ar2) { [1, 2, 3, 4] }
+  let(:proc_map) { proc { |x| x - 2 } }
   # block = -> do
   #   1
   # end
@@ -28,7 +31,7 @@ describe Enumerable do
 
     # address later
     # it "To each element when empty" do
-    #   expect(item.my_each).to be(item.each)
+    #   expect(ary.my_each).to match(ary.each)
     # end
 
     it "To each with a block code" do
@@ -58,6 +61,39 @@ describe Enumerable do
     end
   end
 
+  describe "#my_any?" do
+    it "To check if any numbers are < 50" do
+      expect(c.my_any? { |x| x < 50 }).to eql(c.any? { |x| x < 50 })
+    end
+  end
 
+  describe "#my_none?" do
+    it "To check if no one of the numbers are > 50" do
+      expect(c.my_none? { |x| x > 52 }).to eql(c.none? { |x| x > 52 })
+    end
+  end
 
+  describe "#my_count" do
+    it "To count all the elements on the array" do
+      expect(ary.my_count).to eql(ary.count)
+    end
+
+    it "To count all the elements on the array that are = to 2" do
+      expect(ary.my_count(2)).to eql(ary.count(2))
+    end
+
+    it "To count all the elements on the array that are odd" do
+      expect(ary.my_count { |x| x % 2 == 1 }).to eql(ary.count { |x| x % 2 == 1 })
+    end
+  end
+
+  describe "#my_map" do
+    it "To change all elements on the array" do
+      expect(ar2.my_map { |x| x * x }).to eql(ar2.map { |x| x * x })
+    end
+
+    it "To change all elements on the array executing the proc instead of the block" do
+      expect(ar2.my_map(proc_map) { |x| x * x }).to eql(ar2.map { |x| x - 2 })
+    end
+  end
 end
