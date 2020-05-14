@@ -1,4 +1,4 @@
-# rubocop:disable Style/StringLiterals,Style/BlockDelimiters,Layout/LineLength
+# rubocop:disable Style/StringLiterals,Style/BlockDelimiters,Layout/LineLength,Style/EvenOdd:
 require "./enumerables.rb"
 
 describe Enumerable do
@@ -25,7 +25,7 @@ describe Enumerable do
     end
 
     it "my_each should return an enumerator when block is not given" do
-       expect(array.my_each).to be_an Enumerator
+      expect(array.my_each).to be_an Enumerator
     end
 
     it "To each with a block code" do
@@ -40,7 +40,7 @@ describe Enumerable do
     end
 
     it "my_each_with_index should return an enumerator when block is not given" do
-       expect(array.my_each_with_index).to be_an Enumerator
+      expect(array.my_each_with_index).to be_an Enumerator
     end
 
     it "To each element do a block code" do
@@ -55,7 +55,7 @@ describe Enumerable do
     end
 
     it "my_select should return an enumerator when block is not given" do
-       expect(array.my_select).to be_an Enumerator
+      expect(array.my_select).to be_an Enumerator
     end
 
     it "To select even numbers" do
@@ -137,7 +137,7 @@ describe Enumerable do
     end
 
     it "my_map should return an enumerator when block is not given" do
-       expect(array.my_map).to be_an Enumerator
+      expect(array.my_map).to be_an Enumerator
     end
 
     it "To change all elements on the array executing the proc instead of the block" do
@@ -164,9 +164,9 @@ describe Enumerable do
 
     it "find the longuer words" do
       search = proc { |memo, word| memo.length > word.length ? memo : word }
-      expect(["cat", "sheep", "bear"].my_inject(&search)).to eql(["cat", "sheep", "bear"].inject(&search))
+      expect(%w[cat sheep bear].my_inject(&search)).to eql(%w[cat sheep bear].inject(&search))
     end
   end
 end
 
-# rubocop:enable Style/StringLiterals,Style/BlockDelimiters,Layout/LineLength
+# rubocop:enable Style/StringLiterals,Style/BlockDelimiters,Layout/LineLength,Style/EvenOdd:
