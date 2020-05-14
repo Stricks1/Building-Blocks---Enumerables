@@ -96,4 +96,28 @@ describe Enumerable do
       expect(ar2.my_map(proc_map) { |x| x * x }).to eql(ar2.map { |x| x - 2 })
     end
   end
+
+  describe "#my_inject" do
+    it "To add elements to each other: test parameter" do
+      expect((5..10).my_inject(:+)).to eql((5..10).inject(:+))
+    end
+
+    it "To add elements to each other: test block" do
+      expect((5..10).my_inject{ |sum, n| sum + n }).to eql((5..10).inject{ |sum, n| sum + n })
+    end
+
+    it "multiply elements to each other: test parameter" do
+      expect((5..10).my_inject(1, :*)).to eql((5..10).inject(1, :*))
+    end
+
+    it "multiply elements to each other: test block" do
+      expect((5..10).my_inject(1) { |product, n| product * n }).to eql((5..10).inject(1) { |product, n| product * n })
+    end
+
+    it "find the longuer words" do
+      search = proc { |memo, word| memo.length > word.length ? memo : word }
+      expect(['cat', 'sheep', 'bear'].my_inject(&search)).to eql(['cat', 'sheep', 'bear'].inject(&search))
+    end
+  end
+
 end
