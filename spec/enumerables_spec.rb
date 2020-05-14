@@ -24,10 +24,9 @@ describe Enumerable do
       expect(ar1).to eql(ar12)
     end
 
-    # address later
-    # it "To each element when empty" do
-    #   expect(ary.my_each).to match(ary.each)
-    # end
+    it "my_each should return an enumerator when block is not given" do
+       expect(array.my_each).to be_an Enumerator
+    end
 
     it "To each with a block code" do
       block = proc { |num| my_each_output.concat(num.to_s) }
@@ -40,6 +39,10 @@ describe Enumerable do
       expect(test_array1.my_each_with_index { |x, y| p "item: #{x}, index: #{y}" }).to eql(test_array1.each_with_index { |x, y| p "item: #{x}, index: #{y}" })
     end
 
+    it "my_each_with_index should return an enumerator when block is not given" do
+       expect(array.my_each_with_index).to be_an Enumerator
+    end
+
     it "To each element do a block code" do
       expect((1..6).my_each_with_index { |x, _v| ar1 << x }).to eql((1..6).each_with_index { |x, _v| ar12 << x })
       expect(ar1).to eql(ar12)
@@ -50,6 +53,11 @@ describe Enumerable do
     it "To select element do a block code" do
       expect(a.my_select { |v| v =~ /[aeiou]/ }).to eql(a.select { |v| v =~ /[aeiou]/ })
     end
+
+    it "my_select should return an enumerator when block is not given" do
+       expect(array.my_select).to be_an Enumerator
+    end
+
     it "To select even numbers" do
       expect(c.my_select(&:even?)).to eql(c.select(&:even?))
     end
@@ -126,6 +134,10 @@ describe Enumerable do
   describe "#my_map" do
     it "To change all elements on the array" do
       expect(ar2.my_map { |x| x * x }).to eql(ar2.map { |x| x * x })
+    end
+
+    it "my_map should return an enumerator when block is not given" do
+       expect(array.my_map).to be_an Enumerator
     end
 
     it "To change all elements on the array executing the proc instead of the block" do
