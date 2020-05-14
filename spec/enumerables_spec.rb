@@ -10,7 +10,7 @@ describe Enumerable do
       expect(ar1).to eql(ar2)
     end
     it "To each element when empty" do
-      expect(item.my_each).to eql(item.each)
+      expect(item.my_each).to eq(item.each)
     end
   end
 end
