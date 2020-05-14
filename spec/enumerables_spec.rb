@@ -1,12 +1,10 @@
+# rubocop:disable Style/StringLiterals,Style/BlockDelimiters,Layout/LineLength
 require "./enumerables.rb"
 
 describe Enumerable do
   let(:test_array1) { [11, 2, 3, 56] }
-  let(:test_array2) { %w[a b c d] }
   let(:a) { %w[a b c d e f] }
   let(:c) { [18, 22, 3, 3, 53, 6] }
-  let(:true_array) { [1, true, "hi", []] }
-  let(:false_array) { [nil, false, nil, false] }
   let(:words) { %w[dog door rod blade] }
   let(:array) {
     [1, 2, 3, 5, 1, 7, 3, 4, 5, 7, 2, 3, 2, 0, 8, 8, 7, 8, 1, 6, 1, 1, 7, 2, 1, 2, 5, 8, 6, 0, 4, 5, 8, 2, 2, 5, 4,
@@ -17,16 +15,13 @@ describe Enumerable do
   let(:ary) { [1, 2, 4, 2] }
   let(:ar2) { [1, 2, 3, 4] }
   let(:proc_map) { proc { |x| x - 2 } }
-  # block = -> do
-  #   1
-  # end
+  let(:ar1) { [] }
+  let(:ar12) { [] }
 
   describe "#my_each" do
-    let(:ar1) { [] }
-    let(:ar2) { [] }
     it "To each element do a block code" do
-      expect((1..6).my_each { |x| ar1 << x }).to eql((1..6).each { |x| ar2 << x })
-      expect(ar1).to eql(ar2)
+      expect((1..6).my_each { |x| ar1 << x }).to eql((1..6).each { |x| ar12 << x })
+      expect(ar1).to eql(ar12)
     end
 
     # address later
@@ -44,6 +39,11 @@ describe Enumerable do
     it "To each element do a block code" do
       expect(test_array1.my_each_with_index { |x, y| p "item: #{x}, index: #{y}" }).to eql(test_array1.each_with_index { |x, y| p "item: #{x}, index: #{y}" })
     end
+
+    it "To each element do a block code" do
+      expect((1..6).my_each_with_index { |x, _v| ar1 << x }).to eql((1..6).each_with_index { |x, _v| ar12 << x })
+      expect(ar1).to eql(ar12)
+    end
   end
 
   describe "#my_select" do
@@ -59,17 +59,53 @@ describe Enumerable do
     it "To check if all numbers are >= 3" do
       expect(c.my_all? { |x| x > 3 }).to eql(c.all? { |x| x > 3 })
     end
+
+    it "To check the return if a class is given" do
+      expect([1, 2].my_all?(Numeric)).to eql([1, 2].all?(Numeric))
+    end
+
+    it "To check the return if a parameter object is given" do
+      expect([1, 2].my_all?(1)).to eql([1, 2].all?(1))
+    end
+
+    it "To check the return if a regular expression is given" do
+      expect(words.my_all?(/d/)).to eql(words.all?(/d/))
+    end
   end
 
   describe "#my_any?" do
     it "To check if any numbers are < 50" do
       expect(c.my_any? { |x| x < 50 }).to eql(c.any? { |x| x < 50 })
     end
+
+    it "To check the return if a class is given" do
+      expect([1, 2].my_any?(Numeric)).to eql([1, 2].any?(Numeric))
+    end
+
+    it "To check the return if a parameter object is given" do
+      expect([1, 2].my_any?(1)).to eql([1, 2].any?(1))
+    end
+
+    it "To check the return if a regular expression is given" do
+      expect(words.my_any?(/d/)).to eql(words.any?(/d/))
+    end
   end
 
   describe "#my_none?" do
     it "To check if no one of the numbers are > 50" do
       expect(c.my_none? { |x| x > 52 }).to eql(c.none? { |x| x > 52 })
+    end
+
+    it "To check the return if a class is given" do
+      expect([1, 2].my_none?(Numeric)).to eql([1, 2].none?(Numeric))
+    end
+
+    it "To check the return if a parameter object is given" do
+      expect([1, 2].my_none?(1)).to eql([1, 2].none?(1))
+    end
+
+    it "To check the return if a regular expression is given" do
+      expect(words.my_none?(/d/)).to eql(words.none?(/d/))
     end
   end
 
@@ -103,7 +139,7 @@ describe Enumerable do
     end
 
     it "To add elements to each other: test block" do
-      expect((5..10).my_inject{ |sum, n| sum + n }).to eql((5..10).inject{ |sum, n| sum + n })
+      expect((5..10).my_inject { |sum, n| sum + n }).to eql((5..10).inject { |sum, n| sum + n })
     end
 
     it "multiply elements to each other: test parameter" do
@@ -116,8 +152,9 @@ describe Enumerable do
 
     it "find the longuer words" do
       search = proc { |memo, word| memo.length > word.length ? memo : word }
-      expect(['cat', 'sheep', 'bear'].my_inject(&search)).to eql(['cat', 'sheep', 'bear'].inject(&search))
+      expect(["cat", "sheep", "bear"].my_inject(&search)).to eql(["cat", "sheep", "bear"].inject(&search))
     end
   end
-
 end
+
+# rubocop:enable Style/StringLiterals,Style/BlockDelimiters,Layout/LineLength
