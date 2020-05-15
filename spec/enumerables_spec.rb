@@ -79,6 +79,12 @@ describe Enumerable do
     it "To check the return if a regular expression is given" do
       expect(words.my_all?(/d/)).to eql(words.all?(/d/))
     end
+
+    context "when no block or argument is given" do
+      it "returns true when none of the collection members are false or nil" do
+        expect(ary.my_all?).to eql(ary.all?)
+      end
+    end
   end
 
   describe "#my_any?" do
@@ -97,6 +103,12 @@ describe Enumerable do
     it "To check the return if a regular expression is given" do
       expect(words.my_any?(/d/)).to eql(words.any?(/d/))
     end
+
+    context "when no block or argument is given" do
+      it " returns true if at least one of the collection is not false or nil" do
+        expect(ary.my_any?).to eql(ary.any?)
+      end
+    end
   end
 
   describe "#my_none?" do
@@ -114,6 +126,13 @@ describe Enumerable do
 
     it "To check the return if a regular expression is given" do
       expect(words.my_none?(/d/)).to eql(words.none?(/d/))
+    end
+
+    context "when no block or argument is given" do
+      it " returns true only if none of the collection members is true" do
+        false_array = [false, nil, false]
+        expect(false_array.my_none?).to eql(false_array.none?)
+      end
     end
   end
 
@@ -162,7 +181,7 @@ describe Enumerable do
       expect((5..10).my_inject(1) { |product, n| product * n }).to eql((5..10).inject(1) { |product, n| product * n })
     end
 
-    it "find the longuer words" do
+    it "find the longer words" do
       search = proc { |memo, word| memo.length > word.length ? memo : word }
       expect(%w[cat sheep bear].my_inject(&search)).to eql(%w[cat sheep bear].inject(&search))
     end

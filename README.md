@@ -25,6 +25,10 @@ $ git clone https://github.com/Stricks1/Building-Blocks---Enumerables.git
 
 To run the test file, go to your terminal on the folder you saved and type: ruby test.rb
 
+## Testing with RSpec
+
+To test it you should go to your terminal on the folder you saved and type: rspec
+
 ## Authors
 
 👤 **Author**
