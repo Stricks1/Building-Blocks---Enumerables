@@ -33,11 +33,15 @@ To test it you should go to your terminal on the folder you saved and type: rspe
 
 👤 **Author**
 
+Gabriel Malheiros Silveira
+
 - Github: [@Stricks1](https://github.com/Stricks1)
 - E-mail: [Gabriel Silveira](mailto:gmalheiross@gmail.com)
 - Linkedin: [Gabriel Silveira](https://linkedin.com/in/gabriel-malheiros-silveira-b6632061/)
 
 👤 **Author 2**
+
+Rindra Josia
 
 * Github: **[@rindrajosia](https://github.com/rindrajosia)**
 * Twitter: **[@rindrajosia](https://twitter.com/josia_rindra)**
